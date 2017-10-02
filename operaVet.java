@@ -59,10 +59,11 @@ class operaVet {
     		return a[inicio];
     	}
     	else{
-    		if (a[inicio] < minRec1(a, inicio+1)){
+    		int proxMin = minRec1(a, inicio+1);
+    		if (a[inicio] < proxMin){
 	    		return a[inicio] ;
     		}
-    		return minRec1(a, inicio+1);
+    		return proxMin;
     	}
     }
 
