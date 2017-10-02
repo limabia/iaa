@@ -1,4 +1,4 @@
-/* Escreva um método recursivo que recebe dois valores inteiros c e n, e devolve o valor de c^n
+/* 7. Escreva um método recursivo que recebe dois valores inteiros c e n, e devolve o valor de c^n
 (obs:
 sem utilizar qualquer método da classe Math).*/
 class exponenciacao{
@@ -11,8 +11,8 @@ class exponenciacao{
         }
     }
     public static void main(String[] arg){
-    int c = 2;
-    int n = 3;
-    System.out.println(exponencia(c, n));
+	    int c = 2;
+	    int n = 3;
+	    System.out.println(exponencia(c, n));
     }
 }
