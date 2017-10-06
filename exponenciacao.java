@@ -1,4 +1,4 @@
-/* 7. Escreva um método recursivo que recebe dois valores inteiros c e n, e devolve o valor de c^n
+/* 6. Escreva um método recursivo que recebe dois valores inteiros c e n, e devolve o valor de c^n
 (obs:
 sem utilizar qualquer método da classe Math).*/
 class exponenciacao{
