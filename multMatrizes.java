@@ -1,4 +1,4 @@
-/* Escreva um método iterativo que recebe duas matrizes A (de dimensão n×m) e B (de dimensão
+/* 3 Escreva um método iterativo que recebe duas matrizes A (de dimensão n×m) e B (de dimensão
 m × p) de valores inteiros, e devolve o produto de A por B.*/
 class multMatrizes{
 
