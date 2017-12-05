@@ -118,10 +118,29 @@ class Lista3 {
 		
  	}
 
-	public static void main(String [] args){
-		String[] y = {"a", "b", "c"};
-		retorno(y, 0);
+ 	public static String combinatoriasArray(char[] c, int n,String prefixo){
+		if(n==0){
+			return prefixo;
+		}
 
+		String aux;
+		for(int i=0;i<c.length;i++){
+			aux = prefixo;
+			prefixo += c[i]; 
+			combinatoriasArray(c,n-1,prefixo);
+			prefixo = aux;
+		}
+		return prefixo;
+	}
+
+	public static void main(String [] args){
+		// String[] y = {"a", "b", "c"};
+		// retorno(y, 0);
+
+		char[] c={'a','b','c'};
+		int n = 0;
+		String prefixo = new String();
+		System.out.println(combinatoriasArray(c, n, prefixo));
 
 		/* String[][] matriz = { {" . ", " . ", " . ", " . ", " . "},
 							  {" X ", " . ", " X ", " X ", " . "},
