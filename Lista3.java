@@ -134,32 +134,35 @@ class Lista3 {
 	}
 
 	public static void main(String [] args){
-		// String[] y = {"a", "b", "c"};
-		// retorno(y, 0);
+		String[] y = {"a", "b"};
+		retorno(y, 0);
 
-		char[] c={'a','b','c'};
-		int n = 0;
-		String prefixo = new String();
-		System.out.println(combinatoriasArray(c, n, prefixo));
-
-		/* String[][] matriz = { {" . ", " . ", " . ", " . ", " . "},
-							  {" X ", " . ", " X ", " X ", " . "},
-							  {" . ", " . ", " X ", " . ", " . "},
-							  {" X ", " . ", " X ", " . ", " X "},
-							  {" X ", " . ", " . ", " . ", " . "} };
-		imprimeMatriz(matriz);
+// 		char[] c={'a','b','c'};
+// 		int n = 0;
+// 		String prefixo = new String();
+// 		System.out.println(combinatoriasArray(c, n, prefixo))
+// ;
+// 		String[][] matriz = { {" . ", " . ", " . ", " . ", " . "},
+// 							  {" X ", " . ", " X ", " X ", " . "},
+// 							  {" . ", " . ", " X ", " . ", " . "},
+// 							  {" X ", " . ", " X ", " . ", " X "},
+// 							  {" X ", " . ", " . ", " . ", " . "} };
+// 		imprimeMatriz(matriz);
 		
-		Scanner sc = new Scanner(System.in);
-		int ix, iy, fx, fy;
-		System.out.println("\n Entre com as cordenadas da Matriz onde nao haja X no formato inicio/fim x y x y ");
-		ix = sc.nextInt();
-		iy = sc.nextInt();
-		fx = sc.nextInt();
-		fy = sc.nextInt();*/
+// 		Scanner sc = new Scanner(System.in);
+// 		int ix, iy, fx, fy;
+// 		int p = { 1, 5, 7 };
 		
-		//fazCaminho(ix, iy, fx, fy, matriz);
+// 		int w = { 1, 5, 7, 9, 10, 2, 4, 3, 6, 8, 14, 11, 12, 15, 13, 16, 22, 18, 19, 17, 21, 20 };
+// 		Scanner sc = new Scanner(System.in);
+// 		ix = sc.nextInt();
+// 		iy = sc.nextInt();
+// 		fx = sc.nextInt();
+// 		fy = sc.nextInt();
+		
+// 		fazCaminho(ix, iy, fx, fy, 0 , matriz, p, w);
 		/*
-		Scanner sc = new Scanner(System.in);
+		
 		int[] w = { 1, 5, 7, 9, 10, 2, 4, 3, 6, 8, 14, 11, 12, 15, 13, 16, 22, 18, 19, 17, 21, 20 };
 		int x;
 		imprimeVetor(w);
@@ -172,3 +175,8 @@ class Lista3 {
 		
 	}
 }
+
+
+
+
+
