@@ -35,16 +35,21 @@ public class EP {
                 }
 
                 int qntItens = Integer.parseInt(lerArq.readLine());
-                String[] conjuntoDeItens = new String[qntItens];
-                
+                String[][] conjuntoDeItens = new String[qntItens] [4];
+                System.out.println(qntItens);
                 for (int x=0; x < qntItens; x++){
-                    linhaItem = lerArq.readLine();
-                    String[] item = new String [4]; 
-                    item[0] = linhaItem.substring(0,1);
-                    item[1] = linhaItem.substring(1,2);
-                    item[2] = linhaItem.substring(2,3);
-                    item[3] = linhaItem.substring(3,4);
-                    conjuntoDeItens[x] = item;
+                    String linhaItem = lerArq.readLine();
+                    
+                    conjuntoDeItens[x][0] = linhaItem.substring(0,1);
+                    conjuntoDeItens[x][1] = linhaItem.substring(1,2);
+                    conjuntoDeItens[x][2] = linhaItem.substring(2,3);
+                    conjuntoDeItens[x][3] = linhaItem.substring(3,4);
+
+                    System.out.printf("\n%s", conjuntoDeItens[x][0]);
+                    System.out.printf("%s", conjuntoDeItens[x][1]);
+                    System.out.printf("%s", conjuntoDeItens[x][2]);
+                    System.out.printf("%s", conjuntoDeItens[x][3]);
+
                 }
                 arq.close();
             } 
