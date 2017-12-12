@@ -20,7 +20,8 @@ public class EP {
     private static int yChegada;
     private static List<int[]> coordenadasAtuais;
     private static List<int[]> melhoresCoordenadas;
-    
+    private static List<int[]> mochilaAtual;
+    private static List<int[]> melhorMochila;
 
 
     public static void leArquivo(String nome_arquivo){
@@ -83,28 +84,32 @@ public class EP {
 
         coordenadasAtuais = new LinkedList<int[]>();
 
-        
-        achaQualquerCaminho(xPartida, yPartida);
-             
+        mochilaAtual = new LinkedList<int[]>();
+        caminha(xPartida, yPartida);
         // TODO verificar se existe um caminho 
-
         System.out.printf("Caminho de tamanho: %d\n", melhoresCoordenadas.size());
         for (int[] coord : melhoresCoordenadas){
             System.out.printf("%s %s\n", coord[0], coord[1]);
         }
-
     }
 
 
-    public static void achaQualquerCaminho(int x, int y){ 
-        for (int i= 0; i < qntLinhas; i++){
-            for (int j=0; j < qntColunas; j++){
-                System.out.printf(mapa[i][j]);
-            }
-            System.out.printf("\n");
+    public static boolean cabeMochila(int pesoItem){
+        int pesoMochila = 0;
+        for(int[] item : mochilaAtual){
+            pesoMochila += item [3];
         }
-        System.out.printf("\n");
+        int capacidadeRestante = capacidadeMochila - pesoMochila;
+        System.out.println("Cabe na mochila - pesoItem: " + pesoItem + " pesoMochila: " + pesoMochila);
+        if (capacidadeRestante >= pesoItem ){
+            System.out.println("SIM");
+            return true;
+        }
+        System.out.println("NAO");
+        return false;
+    }
 
+    public static void caminha(int x, int y){
         int[] coord = new int[2];
         coord[0] = x;
         coord[1] = y;
@@ -112,13 +117,39 @@ public class EP {
         if (mapa[x][y].equals("C")){
             coordenadasAtuais.add(coord);
 
-            if (melhoresCoordenadas == null){
-                melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+            if (criterio == 1){
+                if (melhoresCoordenadas == null){
+                    melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+                }
+                else if (coordenadasAtuais.size() < melhoresCoordenadas.size()){
+                    melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+                }
             }
-            else if (coordenadasAtuais.size() < melhoresCoordenadas.size()){
-                melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+            else {
+                if (melhorMochila == null){
+                    melhorMochila = new LinkedList<int[]>(mochilaAtual);
+                    melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+                }
+                else {
+                    int valorMelhorMochila = 0;
+                    for (int[] item : melhorMochila){
+                        valorMelhorMochila += item[2];
+                    }
+                    
+                    int valorMochilaAtual = 0;
+                    for (int[] item : mochilaAtual){
+                        valorMochilaAtual += item[2];
+                    }
+                    
+                    if (valorMochilaAtual > valorMelhorMochila) {
+                        melhorMochila = new LinkedList<int[]>(mochilaAtual);
+                        melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+                    }
+                }
             }
+
             coordenadasAtuais.remove(coord);
+            
             return;
         }
 
@@ -128,22 +159,36 @@ public class EP {
 
         coordenadasAtuais.add(coord);
         mapa[x][y] = "*";
-        
+
+        boolean temItem = false;
+        // add itens a mochila 
+        for (int i=0; i < qntItens; i++){
+            if(conjuntoDeItens[i][0] == x && conjuntoDeItens[i][1] == y){
+                if (criterio == 2 || cabeMochila(conjuntoDeItens[i][3])){
+                    mochilaAtual.add(conjuntoDeItens[i]);
+                    temItem = true;
+                }
+            }
+        }
 
         if (y < qntColunas-1){
-            achaQualquerCaminho(x, y+1);
+            caminha(x, y+1);
         }
         if (x > 0){
-            achaQualquerCaminho(x-1, y);
+            caminha(x-1, y);
         }
         if (y > 0){
-            achaQualquerCaminho(x, y-1);   
+            caminha(x, y-1);   
         }
         if (x < qntLinhas-1){
-            achaQualquerCaminho(x+1, y);    
+            caminha(x+1, y);    
         }
+        
         mapa[x][y] = ".";
         coordenadasAtuais.remove(coord);
+        if (temItem){    
+            mochilaAtual.remove(mochilaAtual.size()-1);
+        }
         return;
     }
 
