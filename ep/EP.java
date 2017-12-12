@@ -18,7 +18,8 @@ public class EP {
     private static int yPartida;
     private static int xChegada;
     private static int yChegada;
-    private static List<int[]> coordenadas;
+    private static List<int[]> coordenadasAtuais;
+    private static List<int[]> melhoresCoordenadas;
     
 
 
@@ -77,76 +78,73 @@ public class EP {
 
 
     public static void encontraCaminho(int criterio){
-        if(criterio == 1){
-            System.out.println("caminho minimo");
-        }
-        else if(criterio == 2){
-            System.out.println("caminho maximo valor atributos");
-        }
-        else if(criterio == 3){
-            System.out.println("caminho maximo com limitante da mochila");
-        }
-        else {
-            System.out.println("criterio errado");
-        }
-
         mapa [xPartida] [yPartida] = "P";
         mapa [xChegada][yChegada] = "C";
 
-        coordenadas = new LinkedList<int[]>();
-        achaQualquerCaminho(xPartida, yPartida);
+        coordenadasAtuais = new LinkedList<int[]>();
 
+        
+        achaQualquerCaminho(xPartida, yPartida);
+             
+        // TODO verificar se existe um caminho 
+
+        System.out.printf("Caminho de tamanho: %d\n", melhoresCoordenadas.size());
+        for (int[] coord : melhoresCoordenadas){
+            System.out.printf("%s %s\n", coord[0], coord[1]);
+        }
+
+    }
+
+
+    public static void achaQualquerCaminho(int x, int y){ 
         for (int i= 0; i < qntLinhas; i++){
             for (int j=0; j < qntColunas; j++){
                 System.out.printf(mapa[i][j]);
             }
             System.out.printf("\n");
         }
+        System.out.printf("\n");
 
-    }
+        int[] coord = new int[2];
+        coord[0] = x;
+        coord[1] = y;
 
+        if (mapa[x][y].equals("C")){
+            coordenadasAtuais.add(coord);
 
-    public static boolean achaQualquerCaminho(int x, int y){ 
-        if (mapa[x][y] == "C"){
-            int[] coord = new int[2];
-            coord[0] = x;
-            coord[0] = y;
-            coordenadas.add(coord);
-            return true;
-        }
-        if (mapa[x][y] == "#" || mapa[x][y] == "*"){
-            return false;
-        }
-        mapa[x][y] = "*";
-        boolean resultado; 
-        if (y < qntColunas-1){
-            resultado = achaQualquerCaminho(x, y+1);
-            if (resultado) { 
-                return true;
+            if (melhoresCoordenadas == null){
+                melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
             }
+            else if (coordenadasAtuais.size() < melhoresCoordenadas.size()){
+                melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+            }
+            coordenadasAtuais.remove(coord);
+            return;
+        }
+
+        if (mapa[x][y].equals("X") || mapa[x][y].equals("*")){
+            return;
+        }
+
+        coordenadasAtuais.add(coord);
+        mapa[x][y] = "*";
+        
+
+        if (y < qntColunas-1){
+            achaQualquerCaminho(x, y+1);
         }
         if (x > 0){
-            resultado = achaQualquerCaminho(x-1, y);
-            if (resultado) { 
-                return true;
-            }
+            achaQualquerCaminho(x-1, y);
         }
         if (y > 0){
-            resultado = achaQualquerCaminho(x, y-1);
-            if (resultado) { 
-                return true;
-            }     
+            achaQualquerCaminho(x, y-1);   
         }
         if (x < qntLinhas-1){
-            resultado = achaQualquerCaminho(x+1, y);
-            if (resultado) { 
-                return true;
-            }     
+            achaQualquerCaminho(x+1, y);    
         }
-
-        mapa[x][y] = " ";
-        
-        return false;
+        mapa[x][y] = ".";
+        coordenadasAtuais.remove(coord);
+        return;
     }
 
 
@@ -154,11 +152,16 @@ public class EP {
         if (args.length == 2){
             String nome_arquivo = args[0];
             criterio = Integer.parseInt(args[1]); 
-            leArquivo(nome_arquivo);
-            encontraCaminho(criterio);
+            if (criterio <= 3){
+                leArquivo(nome_arquivo);
+                encontraCaminho(criterio);
+            }
+            else{
+                System.err.println("Informe um criterio valido para percorrer o labirinto.");
+            }
         }
         else {
-            System.err.println("eh preciso adicionar os parâmetros nome do arquivo e criterio ao rodar o programa.");
+            System.err.println("Adicione os parametros nome do arquivo e criterio ao rodar o programa.");
         } 
     }
 }
