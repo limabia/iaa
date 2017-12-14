@@ -20,6 +20,7 @@ public class EP {
     private static int yChegada;
     private static List<int[]> coordenadasAtuais;
     private static List<int[]> melhoresCoordenadas;
+    private static List<int[]> itensDoCaminho;
     private static List<int[]> mochilaAtual;
     private static List<int[]> melhorMochila = new LinkedList<int[]>();
     private static int valorMelhorMochila = 0;
@@ -101,7 +102,7 @@ public class EP {
         mapa [xChegada][yChegada] = "C";
 
         coordenadasAtuais = new LinkedList<int[]>();
-        mochilaAtual = new LinkedList<int[]>(); 
+        itensDoCaminho = new LinkedList<int[]>(); 
         
         caminha(xPartida, yPartida);
 
@@ -124,6 +125,86 @@ public class EP {
     }
 
 
+    public static LinkedList<int[]> melhorMochilaComOsItens(LinkedList<int[]> itens, int capacidade) {
+        if (itens.size() == 0) {
+            return itens;
+        }
+        int[] primeiroItem = itens.removeFirst();
+
+        LinkedList<int[]> mochila1 = melhorMochilaComOsItens(new LinkedList<int[]>(itens), capacidade);
+
+        if (capacidade < primeiroItem[3]) {
+            return mochila1;
+        }
+
+        LinkedList<int[]> mochila2 = melhorMochilaComOsItens(new LinkedList<int[]>(itens), capacidade - primeiroItem[3]);
+
+        int valorMochila1 = 0;
+        int valorMochila2 = 0;
+
+        for (int[] item : mochila1) {
+            valorMochila1 += item[2];
+        }
+        for (int[] item : mochila2) {
+            valorMochila2 += item[2];
+        }
+
+        if (valorMochila1 > valorMochila2 + primeiroItem[2]) {
+            return mochila1;
+        } else {
+            mochila2.addFirst(primeiroItem);
+            return mochila2;
+        }
+    }
+
+
+    public static void atualizaMelhorCaminho() {
+        if (criterio == 3){
+            mochilaAtual = melhorMochilaComOsItens(new LinkedList<int[]>(itensDoCaminho), capacidadeMochila);
+        } else {
+            mochilaAtual = new LinkedList<int[]>(itensDoCaminho);
+        }
+        // encontra somente o melhor caminho, sem levar em consideracao os itens
+        if (criterio == 1){
+            if (melhoresCoordenadas == null){
+                melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+            }
+            else if (coordenadasAtuais.size() < melhoresCoordenadas.size()){
+                melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+            }
+        }
+        // encontra o melhor caminho levando em consideracao os itens (usado para os criterios 2 e 3)
+        else {
+            // primeiro caminho percorrido
+            if (melhorMochila == null){
+                melhorMochila = new LinkedList<int[]>(mochilaAtual);
+                melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+                for (int[] item : melhorMochila){
+                    pesoMelhorMochila += item[3];
+                    valorMelhorMochila += item[2];
+                }
+            }
+            // demais caminhos
+            else {                    
+                int valorMochilaAtual = 0;
+                int pesoMochilaAtual = 0;
+
+                for (int[] item : mochilaAtual){
+                    valorMochilaAtual += item[2];
+                    pesoMochilaAtual += item[3];   
+                }
+                
+                if (valorMochilaAtual > valorMelhorMochila) {
+                    pesoMelhorMochila = pesoMochilaAtual;
+                    valorMelhorMochila = valorMochilaAtual;
+                    melhorMochila = new LinkedList<int[]>(mochilaAtual);
+                    melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
+                }
+            }
+        }
+    }
+
+
     public static void caminha(int x, int y){
         int[] coord = new int[2];
         coord[0] = x;
@@ -132,45 +213,7 @@ public class EP {
         if (mapa[x][y].equals("C")){
             coordenadasAtuais.add(coord);
 
-            // encontra somente o melhor caminho, sem levar em consideracao os itens
-            if (criterio == 1){
-
-                if (melhoresCoordenadas == null){
-                    melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
-                }
-                else if (coordenadasAtuais.size() < melhoresCoordenadas.size()){
-                    melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
-                }
-            }
-            // encontra o melhor caminho levando em consideracao os itens (usado para os creterios 2 e 3)
-            else {
-                // primeiro caminho percorrido
-                if (melhorMochila == null){
-                    melhorMochila = new LinkedList<int[]>(mochilaAtual);
-                    melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
-                    for (int[] item : melhorMochila){
-                        pesoMelhorMochila += item[3];
-                        valorMelhorMochila += item[2];
-                    }
-                }
-                // demais caminhos
-                else {                    
-                    int valorMochilaAtual = 0;
-                    int pesoMochilaAtual = 0;
-
-                    for (int[] item : mochilaAtual){
-                        valorMochilaAtual += item[2];
-                        pesoMochilaAtual += item[3];   
-                    }
-                    
-                    if (valorMochilaAtual > valorMelhorMochila) {
-                        pesoMelhorMochila = pesoMochilaAtual;
-                        valorMelhorMochila = valorMochilaAtual;
-                        melhorMochila = new LinkedList<int[]>(mochilaAtual);
-                        melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
-                    }
-                }
-            }
+            atualizaMelhorCaminho();
             coordenadasAtuais.remove(coord);
             return;
         }
@@ -180,14 +223,13 @@ public class EP {
         }
         coordenadasAtuais.add(coord);
         mapa[x][y] = "*";
+
         // add itens a mochila 
         boolean temItem = false;
         for (int i=0; i < qntItens; i++){
             if(conjuntoDeItens[i][0] == x && conjuntoDeItens[i][1] == y){
-                if (criterio == 2 || cabeMochila(conjuntoDeItens[i][3])){
-                    mochilaAtual.add(conjuntoDeItens[i]);
-                    temItem = true;
-                }
+                itensDoCaminho.add(conjuntoDeItens[i]);
+                temItem = true;
             }
         }
         // backtracking 
@@ -207,7 +249,7 @@ public class EP {
         mapa[x][y] = ".";
         coordenadasAtuais.remove(coord);
         if (temItem){    
-            mochilaAtual.remove(mochilaAtual.size()-1);
+            itensDoCaminho.remove(itensDoCaminho.size()-1);
         }
 
         return;
