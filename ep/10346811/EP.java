@@ -179,7 +179,7 @@ public class EP {
         // encontra o melhor caminho levando em consideracao os itens (usado para os criterios 2 e 3)
         else {
             // primeiro caminho percorrido
-            if (melhorMochila == null){
+            if (melhoresCoordenadas == null){
                 melhorMochila = new LinkedList<int[]>(mochilaAtual);
                 melhoresCoordenadas = new LinkedList<int[]>(coordenadasAtuais);
                 for (int[] item : melhorMochila){
