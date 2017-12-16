@@ -28,6 +28,7 @@ public class EP {
     private static int pesoMelhorMochila = 0;
 
 
+    /* funcao responsavel pela leitura do arquivo */
     public static void leArquivo(String nome_arquivo) throws IOException {
         // abertura do arquivo
         FileReader arq = new FileReader(nome_arquivo);
@@ -74,7 +75,7 @@ public class EP {
         arq.close();
     }
 
-
+    /* funcao responsavel pela impressao da saida */
     public static void imprimeSaida(){
         // tamanho do Caminho
         System.out.printf("%d\n", melhoresCoordenadas.size()); 
@@ -92,6 +93,7 @@ public class EP {
     }
 
 
+    /* responsavel por marcar a partida e a chegada no mapa e a partir disso chamar a funcao que caminha no mapa */
     public static void encontraCaminho(int criterio){
         mapa [xPartida][yPartida] = "P";
         mapa [xChegada][yChegada] = "C";
@@ -110,6 +112,7 @@ public class EP {
     }
 
 
+    /* verifica se o tem cabe na mochila dada sua capacidade e o peso do item */
     public static boolean cabeMochila(int pesoItem){
         int pesoMochila = 0;
         for(int[] item : mochilaAtual){
@@ -123,6 +126,7 @@ public class EP {
     }
 
 
+    /* acha a melhor mochila dada sua capacidade e os itens disponiveis no mapa */
     public static LinkedList<int[]> melhorMochilaComOsItens(LinkedList<int[]> itens, int capacidade) {
         if (itens.size() == 0) {
             return itens;
@@ -156,6 +160,7 @@ public class EP {
     }
 
 
+    /* atualiza qual o melhor caminho a se fazer no mapa de acordo com o criterio escolhido pelo usuario */
     public static void atualizaMelhorCaminho() {
         if (criterio == 3){
             mochilaAtual = melhorMochilaComOsItens(new LinkedList<int[]>(itensDoCaminho), capacidadeMochila);
@@ -203,6 +208,7 @@ public class EP {
     }
 
 
+    /* caminha pelo mapa procurando os caminhos possiveis */
     public static void caminha(int x, int y){
         int[] coord = new int[2];
         coord[0] = x;
@@ -230,7 +236,7 @@ public class EP {
                 temItem = true;
             }
         }
-        // backtracking 
+        // backtracking no mapa
         if (y < qntColunas-1){
             caminha(x, y+1);
         }
