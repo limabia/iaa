@@ -197,7 +197,7 @@ public class EP {
                     pesoMochilaAtual += item[3];   
                 }
                 
-                if (valorMochilaAtual > valorMelhorMochila) {
+                if (valorMochilaAtual > valorMelhorMochila || (valorMochilaAtual == valorMelhorMochila && coordenadasAtuais.size() < melhoresCoordenadas.size())) {
                     pesoMelhorMochila = pesoMochilaAtual;
                     valorMelhorMochila = valorMochilaAtual;
                     melhorMochila = new LinkedList<int[]>(mochilaAtual);
